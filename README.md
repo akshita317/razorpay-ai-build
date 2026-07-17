@@ -83,7 +83,7 @@ PASS  jailbreak_attempt             ESCALATE via R9
 ```bash
 pip install -r requirements.txt
 export GEMINI_API_KEY=...        # free key from https://aistudio.google.com
-uvicorn api.index:app --reload   # UI: serve public/ or open the deployed URL
+uvicorn api.index:app --reload   # UI served at http://localhost:8000/
 pytest tests/                    # rules engine (no API key needed)
 python evals/run_evals.py        # full agent evals
 ```

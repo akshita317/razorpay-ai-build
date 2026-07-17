@@ -15,7 +15,7 @@ from app.data import TRANSACTIONS, format_inr  # noqa: E402
 
 app = FastAPI(title="FaislaAI", version="1.0.0")
 
-_INDEX_HTML = (Path(__file__).resolve().parent.parent / "public" / "index.html")
+_INDEX_HTML = (Path(__file__).resolve().parent.parent / "app" / "static" / "index.html")
 
 
 @app.get("/", response_class=HTMLResponse)
