@@ -77,7 +77,7 @@ def run_agent(message: str, history: list[dict] | None = None) -> dict:
     config = types.GenerateContentConfig(
         system_instruction=SYSTEM_PROMPT,
         tools=[types.Tool(function_declarations=TOOL_DECLARATIONS)],
-        temperature=0.2,
+        temperature=0.0,
     )
 
     trace: list[dict] = []
