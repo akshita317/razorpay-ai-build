@@ -10,24 +10,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #020617;
-    --surface: #0F172A;
-    --surface-2: #1E293B;
-    --border: #293548;
-    --text: #F8FAFC;
-    --muted: #94A3B8;
-    --accent: #22C55E;
-    --accent-dim: #14532D;
-    --blue: #38BDF8;
-    --amber: #FBBF24;
-    --red: #F87171;
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-2: #F1F5F9;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --muted: #475569;
+    --accent: #16A34A;
+    --accent-dim: #DCFCE7;
+    --blue: #0369A1;
+    --amber: #B45309;
+    --red: #DC2626;
     --radius: 14px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
   #particles-js {
     position: fixed; inset: 0; z-index: -1;
-    background: linear-gradient(135deg, #000814 0%, #04122b 45%, #06253d 100%);
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 45%, #90CAF9 100%);
   }
   #particles-js canvas { display: block; }
   body {
@@ -43,7 +43,7 @@
 
   header {
     border-bottom: 1px solid var(--border);
-    background: rgba(2, 6, 23, 0.9);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(8px);
     position: sticky; top: 0; z-index: 30;
   }
@@ -53,8 +53,8 @@
   }
   .logo {
     width: 38px; height: 38px; border-radius: 10px; flex: none;
-    background: linear-gradient(135deg, var(--accent-dim), var(--surface-2));
-    border: 1px solid var(--accent);
+    background: linear-gradient(135deg, #DCFCE7, #F0FDF4);
+    border: 1px solid #86EFAC;
     display: grid; place-items: center;
   }
   .logo svg { width: 20px; height: 20px; stroke: var(--accent); }
@@ -62,8 +62,8 @@
   .tagline { font-size: 0.8rem; color: var(--muted); }
   .badge-live {
     margin-left: auto; display: flex; align-items: center; gap: 6px;
-    font-size: 0.75rem; color: var(--accent); border: 1px solid var(--accent-dim);
-    padding: 4px 10px; border-radius: 999px; background: rgba(34, 197, 94, 0.08);
+    font-size: 0.75rem; color: #15803D; border: 1px solid #BBF7D0;
+    padding: 4px 10px; border-radius: 999px; background: #F0FDF4;
     white-space: nowrap;
   }
   .badge-live .dot {
@@ -119,12 +119,13 @@
     white-space: pre-wrap; overflow-wrap: anywhere;
   }
   .user .bubble {
-    background: rgba(20, 83, 45, 0.85); border: 1px solid rgba(34, 197, 94, 0.35);
+    background: rgba(220, 252, 231, 0.92); border: 1px solid #86EFAC;
     border-bottom-right-radius: 4px; backdrop-filter: blur(6px);
   }
   .bot .bubble {
-    background: rgba(15, 23, 42, 0.88); border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.92); border: 1px solid var(--border);
     border-bottom-left-radius: 4px; backdrop-filter: blur(6px);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   }
 
   .trace { width: 100%; }
@@ -148,14 +149,14 @@
     font-family: "Fira Code", monospace; font-size: 0.7rem; font-weight: 600;
     padding: 2px 8px; border-radius: 999px; border: 1px solid;
   }
-  .verdict.AUTO_REFUND { color: var(--accent); border-color: var(--accent-dim); background: rgba(34,197,94,0.08); }
-  .verdict.AUTO_RETRY { color: var(--blue); border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08); }
-  .verdict.ESCALATE { color: var(--amber); border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.08); }
-  .verdict.REJECT { color: var(--red); border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); }
+  .verdict.AUTO_REFUND { color: #15803D; border-color: #BBF7D0; background: #F0FDF4; }
+  .verdict.AUTO_RETRY { color: #0369A1; border-color: #BAE6FD; background: #F0F9FF; }
+  .verdict.ESCALATE { color: #B45309; border-color: #FDE68A; background: #FFFBEB; }
+  .verdict.REJECT { color: #B91C1C; border-color: #FECACA; background: #FEF2F2; }
   .step pre {
-    background: #0B1120; border: 1px solid var(--border); border-radius: 8px;
+    background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 10px; font-size: 0.72rem; line-height: 1.5;
-    overflow-x: auto; color: #CBD5E1; max-height: 220px; overflow-y: auto;
+    overflow-x: auto; color: #334155; max-height: 220px; overflow-y: auto;
   }
 
   .typing { display: inline-flex; gap: 5px; padding: 14px 16px; }
@@ -186,7 +187,7 @@
   }
   .send:hover:not(:disabled) { opacity: 0.85; }
   .send:disabled { opacity: 0.4; cursor: not-allowed; }
-  .send svg { width: 20px; height: 20px; stroke: #052E16; }
+  .send svg { width: 20px; height: 20px; stroke: #FFFFFF; }
 
   footer {
     text-align: center; font-size: 0.72rem; color: var(--muted);
@@ -410,11 +411,11 @@ addMessage("bot",
     window.particlesJS("particles-js", {
       particles: {
         number: { value: 70, density: { enable: true, value_area: 900 } },
-        color: { value: "#38BDF8" },
-        shape: { type: "circle", stroke: { width: 0.5, color: "#0EA5E9" } },
-        opacity: { value: 0.45, random: true, anim: { enable: true, speed: 0.8, opacity_min: 0.15 } },
+        color: { value: "#0277BD" },
+        shape: { type: "circle", stroke: { width: 0.5, color: "#039BE5" } },
+        opacity: { value: 0.4, random: true, anim: { enable: true, speed: 0.8, opacity_min: 0.15 } },
         size: { value: 2.5, random: true, anim: { enable: true, speed: 1.5, size_min: 0.8 } },
-        line_linked: { enable: true, distance: 150, color: "#0EA5E9", opacity: 0.22, width: 1 },
+        line_linked: { enable: true, distance: 150, color: "#0288D1", opacity: 0.25, width: 1 },
         move: { enable: true, speed: 1.2, random: true, out_mode: "out" },
       },
       interactivity: {

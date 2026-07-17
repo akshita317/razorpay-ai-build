@@ -44,10 +44,18 @@ def main() -> int:
     passed, results = 0, []
 
     for case in cases:
-        try:
-            out = run_agent(case["message"])
-        except Exception as exc:
-            results.append((case["id"], False, f"agent error: {exc}"))
+        out = None
+        for attempt in range(3):
+            try:
+                out = run_agent(case["message"])
+                break
+            except Exception as exc:
+                if "RESOURCE_EXHAUSTED" in str(exc) and attempt < 2:
+                    time.sleep(45)  # free-tier per-minute quota; wait it out
+                    continue
+                results.append((case["id"], False, f"agent error: {exc}"))
+                break
+        if out is None:
             continue
 
         verdict = extract_verdict(out["trace"])
@@ -68,7 +76,7 @@ def main() -> int:
             passed += 1
             results.append((case["id"], True, f"{verdict['action']} via {verdict['rule_id']}"))
 
-        time.sleep(2)  # stay under free-tier rate limits
+        time.sleep(15)  # free tier allows ~15 requests/min; each case uses ~5
 
     print(f"\n{'=' * 62}")
     for case_id, ok, detail in results:
