@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 .vercel/
 .pytest_cache/
+
+.vercel
