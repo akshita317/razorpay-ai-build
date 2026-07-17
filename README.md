@@ -5,7 +5,7 @@
 > deterministic rules engine**, executes it, and drafts the customer reply — all in one loop.
 
 **Live demo:** https://razorpay-ai-build.vercel.app
-**Stack:** Gemini 2.5 Flash (function calling) · FastAPI · Vercel serverless · vanilla JS UI
+**Stack:** Gemini Flash (function calling, `-latest` alias) · FastAPI · Vercel serverless · vanilla JS UI
 
 ---
 
@@ -32,7 +32,7 @@ demo and watch the trace — the refusal is visible.
 
 ```mermaid
 flowchart LR
-    U[Customer complaint] --> A[Gemini 2.5 Flash]
+    U[Customer complaint] --> A[Gemini Flash]
     A -->|lookup_payment| T[(Transactions)]
     A -->|get_customer| C[(Customers)]
     A -->|decide_dispute| R{{Rules engine\nR1..R10, first match wins}}

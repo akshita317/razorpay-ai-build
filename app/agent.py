@@ -10,13 +10,37 @@ from __future__ import annotations
 import os
 
 from google import genai
-from google.genai import types
+from google.genai import errors, types
 
 from .prompts import SYSTEM_PROMPT
 from .tools import TOOL_DECLARATIONS, execute_tool
 
-MODEL = "gemini-2.5-flash"
+# Tried in order. The -latest aliases track Google's current models (so the
+# demo survives model retirements); the rest absorb 503s when the newest
+# model is under heavy demand on the free tier.
+MODEL_CHAIN = [
+    "gemini-flash-latest",
+    "gemini-3.5-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-flash-lite-latest",
+]
 MAX_STEPS = 8
+
+
+def _generate(client: genai.Client, contents, config) -> types.GenerateContentResponse:
+    """Call Gemini, falling through the model chain on availability errors."""
+    last_error: Exception | None = None
+    for model in MODEL_CHAIN:
+        try:
+            return client.models.generate_content(
+                model=model, contents=contents, config=config
+            )
+        except errors.APIError as exc:
+            if exc.code in (404, 429, 503):
+                last_error = exc
+                continue
+            raise
+    raise last_error  # every model in the chain was unavailable
 
 
 def run_agent(message: str, history: list[dict] | None = None) -> dict:
@@ -42,9 +66,7 @@ def run_agent(message: str, history: list[dict] | None = None) -> dict:
 
     trace: list[dict] = []
     for _ in range(MAX_STEPS):
-        response = client.models.generate_content(
-            model=MODEL, contents=contents, config=config
-        )
+        response = _generate(client, contents, config)
         candidate = response.candidates[0]
         parts = candidate.content.parts or []
         calls = [p.function_call for p in parts if p.function_call]
