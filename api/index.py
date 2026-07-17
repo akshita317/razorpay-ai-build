@@ -7,12 +7,20 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fastapi import FastAPI  # noqa: E402
+from fastapi.responses import HTMLResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from app.agent import run_agent  # noqa: E402
 from app.data import TRANSACTIONS, format_inr  # noqa: E402
 
 app = FastAPI(title="FaislaAI", version="1.0.0")
+
+_INDEX_HTML = (Path(__file__).resolve().parent.parent / "public" / "index.html")
+
+
+@app.get("/", response_class=HTMLResponse)
+def home() -> str:
+    return _INDEX_HTML.read_text(encoding="utf-8")
 
 
 class Turn(BaseModel):
