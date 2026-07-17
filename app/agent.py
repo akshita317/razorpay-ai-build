@@ -27,14 +27,22 @@ MODEL_CHAIN = [
 MAX_STEPS = 8
 
 
-def _generate(client: genai.Client, contents, config) -> types.GenerateContentResponse:
-    """Call Gemini, falling through the model chain on availability errors."""
+def _generate(
+    client: genai.Client, contents, config, start_idx: int = 0
+) -> tuple[types.GenerateContentResponse, int]:
+    """Call Gemini, falling through the model chain on availability errors.
+
+    Returns the response plus the index of the model that answered, so the
+    caller can stick with a working model for the rest of the turn instead of
+    re-probing overloaded ones (serverless invocations have a time budget).
+    """
     last_error: Exception | None = None
-    for model in MODEL_CHAIN:
+    for idx in range(start_idx, len(MODEL_CHAIN)):
         try:
-            return client.models.generate_content(
-                model=model, contents=contents, config=config
+            resp = client.models.generate_content(
+                model=MODEL_CHAIN[idx], contents=contents, config=config
             )
+            return resp, idx
         except errors.APIError as exc:
             if exc.code in (404, 429, 503):
                 last_error = exc
@@ -48,7 +56,15 @@ def run_agent(message: str, history: list[dict] | None = None) -> dict:
 
     `history` is prior turns as [{"role": "user"|"assistant", "text": str}].
     """
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    client = genai.Client(
+        api_key=os.environ["GEMINI_API_KEY"],
+        # Fail fast: no SDK-internal retries with backoff — the model chain in
+        # _generate is our retry strategy, and serverless time is limited.
+        http_options=types.HttpOptions(
+            timeout=25_000,
+            retry_options=types.HttpRetryOptions(attempts=1),
+        ),
+    )
 
     contents: list[types.Content] = []
     for turn in history or []:
@@ -65,8 +81,9 @@ def run_agent(message: str, history: list[dict] | None = None) -> dict:
     )
 
     trace: list[dict] = []
+    model_idx = 0
     for _ in range(MAX_STEPS):
-        response = _generate(client, contents, config)
+        response, model_idx = _generate(client, contents, config, model_idx)
         candidate = response.candidates[0]
         parts = candidate.content.parts or []
         calls = [p.function_call for p in parts if p.function_call]
